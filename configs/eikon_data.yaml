@@ -1,0 +1,13 @@
+universe:
+  tickers: ["AAPL.O", "MSFT.O", "GOOG.O", "AMZN.O"]
+  start_date: "2015-01-01"
+  end_date: "2025-08-07"
+
+fields:
+  prices: "TRDPRC_1"
+  volumes: "ACVOL_UNS"
+  industry: "TRBC_EconomicSector"
+
+storage:
+  processed_dir: "data/processed/"
+  raw_dir: "data/raw/"

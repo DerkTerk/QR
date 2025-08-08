@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+src/quant_research/__init__.py
+src/quant_research.egg-info/PKG-INFO
+src/quant_research.egg-info/SOURCES.txt
+src/quant_research.egg-info/dependency_links.txt
+src/quant_research.egg-info/top_level.txt
+src/quant_research/backtest/__init__.py
+src/quant_research/costs/__init__.py
+src/quant_research/cv/__init__.py
+src/quant_research/data_portal/__init__.py
+src/quant_research/data_portal/eikon_loader.py
+src/quant_research/data_portal/io.py
+src/quant_research/factors/__init__.py
+src/quant_research/metrics/__init__.py
+src/quant_research/utils/__init__.py

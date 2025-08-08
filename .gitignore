@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env
+
+# Data artifacts
+data/*
+!data/**/.gitkeep
+models/*
+!models/.gitkeep
+predictions/*
+!predictions/.gitkeep
+reports/*
+!reports/**/.gitkeep
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
