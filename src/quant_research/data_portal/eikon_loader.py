@@ -28,14 +28,49 @@ def _to_datetime(x):
 
 
 def _resolve_dates(start, end):
-    start_dt = _to_datetime(start)
-    if isinstance(end, timedelta):
-        end_dt = start_dt + end
-    else:
-        end_dt = _to_datetime(end)
-    if end_dt <= start_dt:
-        raise ValueError(f"end_date ({end_dt}) must be after start_date ({start_dt}).")
-    return start_dt, end_dt
+    """
+    Accepts str | datetime | date for start/end.
+    Also accepts an integer (days) or timedelta for `end` meaning start + end.
+    Returns timezone-naive datetimes suitable for Eikon get_timeseries.
+    """
+
+    def to_dt(x):
+        if isinstance(x, datetime):
+            return x
+        if isinstance(x, date):
+            return datetime(x.year, x.month, x.day)
+        if isinstance(x, str):
+            # Allow 'YYYY-MM-DD' or full ISO strings
+            return pd.to_datetime(x).to_pydatetime()
+        if isinstance(x, (int, float)):
+            # Interpret as days offset
+            return None, int(x)
+        if isinstance(x, timedelta):
+            return None, x
+        raise TypeError(f"Unsupported date type: {type(x)}")
+
+    s = to_dt(start)
+    e = to_dt(end)
+
+    if isinstance(s, tuple) or s is None:
+        raise ValueError("Start date must be an absolute date/time.")
+
+    if isinstance(e, tuple) or e is None:
+        # end provided as offset
+        _, off = e if isinstance(e, tuple) else (None, e)
+        if isinstance(off, int):
+            e = s + timedelta(days=off)
+        elif isinstance(off, timedelta):
+            e = s + off
+        else:
+            raise TypeError("End offset must be int days or timedelta.")
+
+    # Normalize to dates (strip time) since we want "daily"
+    s = datetime(s.year, s.month, s.day)
+    e = datetime(e.year, e.month, e.day)
+    if e < s:
+        raise ValueError("end < start")
+    return s, e
 
 
 def fetch_prices_volumes(
@@ -58,7 +93,7 @@ def fetch_prices_volumes(
     prices, volumes : pd.DataFrame, pd.DataFrame
     """
     if fields is None:
-        fields = ["CLOSE", "VOLUME"]
+        fields = ["CLOSE", "VOLUME", "TIMESTAMP"]
 
     start_dt, end_dt = _resolve_dates(start, end)
     if chunk_days is None:
@@ -78,6 +113,7 @@ def fetch_prices_volumes(
             end_date=current_end,
             interval=interval,
             normalize=True,
+            calendar="tradingdays",
         )
 
         # detect instrument column
