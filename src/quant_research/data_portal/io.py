@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 import pandas as pd
 
 from quant_research.data_portal.eikon_loader import fetch_prices_volumes

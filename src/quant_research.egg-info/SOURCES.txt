@@ -10,7 +10,12 @@ src/quant_research/costs/__init__.py
 src/quant_research/cv/__init__.py
 src/quant_research/data_portal/__init__.py
 src/quant_research/data_portal/eikon_loader.py
+src/quant_research/data_portal/hyperliquid_loader.py
 src/quant_research/data_portal/io.py
 src/quant_research/factors/__init__.py
 src/quant_research/metrics/__init__.py
+src/quant_research/models/__init__.py
+src/quant_research/models/moving_average.py
+src/quant_research/processing/__init__.py
+src/quant_research/processing/clean_intraday.py
 src/quant_research/utils/__init__.py
